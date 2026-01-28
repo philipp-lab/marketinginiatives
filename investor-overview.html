@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketing Strategy 2025 - Investor Overview</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <title>Marketing Strategy 2025</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
-        #root { width: 100%; min-height: 100vh; }
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9fafb; }
     </style>
 </head>
 <body>
@@ -18,363 +17,428 @@
     <script type="text/babel">
         const { useState } = React;
 
-        const InvestorOverview = () => {
-          const [activeTab, setActiveTab] = useState('strategy');
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('strategy');
 
-          // Strategic pillars with key initiatives
-          const pillars = [
-            {
-              name: 'Hero Campaigns',
-              icon: '🚀',
-              color: 'from-purple-500 to-purple-600',
-              bgLight: 'bg-purple-50',
-              border: 'border-purple-200',
-              description: 'High-impact launches driving brand awareness & lead generation',
-              initiatives: ['GTM10 Brand Campaign', 'Series A Announcement', 'Self-Serve Launch'],
-              timeline: 'Q2-Q3',
-              impact: 'High'
-            },
-            {
-              name: 'Product-Led Growth',
-              icon: '📈',
-              color: 'from-blue-500 to-blue-600',
-              bgLight: 'bg-blue-50',
-              border: 'border-blue-200',
-              description: 'Content & features that convert users organically',
-              initiatives: ['Feature Pages', 'Product Newsletter', 'Integration Launches'],
-              timeline: 'Q1-Q4',
-              impact: 'High'
-            },
-            {
-              name: 'Sales Enablement',
-              icon: '🎯',
-              color: 'from-green-500 to-green-600',
-              bgLight: 'bg-green-50',
-              border: 'border-green-200',
-              description: 'Tools & content to accelerate enterprise deals',
-              initiatives: ['Success Stories', 'Competitor Battlecards', 'Migration Playbooks'],
-              timeline: 'Q1-Q4',
-              impact: 'Medium'
-            },
-            {
-              name: 'Community & Word-of-Mouth',
-              icon: '💬',
-              color: 'from-orange-500 to-orange-600',
-              bgLight: 'bg-orange-50',
-              border: 'border-orange-200',
-              description: 'Organic growth loops through advocacy & influencers',
-              initiatives: ['Customer Advocacy Program', 'Founder Content Flywheel', 'Podcast Appearances'],
-              timeline: 'Q1-Q4',
-              impact: 'High'
-            }
-          ];
+            const tabs = [
+                { id: 'strategy', label: 'Strategy Overview' },
+                { id: 'channels', label: 'Channel Mix' },
+                { id: 'roadmap', label: 'Roadmap' },
+                { id: 'outcomes', label: 'Target Outcomes' }
+            ];
 
-          // Channel allocation
-          const channels = [
-            { name: 'Content & SEO', percentage: 35, color: 'bg-blue-500' },
-            { name: 'Events & Campaigns', percentage: 25, color: 'bg-purple-500' },
-            { name: 'Community & WoM', percentage: 20, color: 'bg-orange-500' },
-            { name: 'Paid Acquisition', percentage: 12, color: 'bg-green-500' },
-            { name: 'Sales Enablement', percentage: 8, color: 'bg-gray-500' }
-          ];
+            const pillars = [
+                {
+                    icon: '🚀',
+                    title: 'Hero Campaigns',
+                    description: 'High-impact launches driving brand awareness & lead generation',
+                    initiatives: ['GTM10 Brand Campaign', 'Series A Announcement', 'Self-Serve Launch'],
+                    timeline: 'Q2-Q3',
+                    bgColor: 'bg-red-50'
+                },
+                {
+                    icon: '🌍',
+                    title: 'GEO',
+                    description: 'Generative Engine Optimization for AI-first discovery',
+                    initiatives: ['AI Search Optimization', 'Structured Content', 'Knowledge Graphs'],
+                    timeline: 'Q1-Q4',
+                    bgColor: 'bg-blue-50'
+                },
+                {
+                    icon: '🎯',
+                    title: 'Sales Enablement',
+                    description: 'Tools & content to accelerate enterprise deals',
+                    initiatives: ['Success Stories', 'Competitor Battlecards', 'Migration Playbooks'],
+                    timeline: 'Q1-Q4',
+                    bgColor: 'bg-yellow-50'
+                },
+                {
+                    icon: '💬',
+                    title: 'Community & Word-of-Mouth',
+                    description: 'Organic growth loops through advocacy & influencers',
+                    initiatives: ['Customer Advocacy Program', 'Founder Content Flywheel', 'Podcast Appearances'],
+                    timeline: 'Q1-Q4',
+                    bgColor: 'bg-orange-50'
+                }
+            ];
 
-          // Key metrics
-          const metrics = [
-            { label: 'Target MQLs', value: '2,500+', subtext: 'per quarter by Q4', icon: '📊' },
-            { label: 'Pipeline Influence', value: '60%', subtext: 'marketing-sourced', icon: '💰' },
-            { label: 'Brand Reach', value: '10x', subtext: 'YoY awareness growth', icon: '📣' },
-            { label: 'CAC Efficiency', value: '-20%', subtext: 'reduction target', icon: '⚡' }
-          ];
-
-          // Timeline milestones
-          const milestones = [
-            { quarter: 'Q1', title: 'Foundation', items: ['Sales enablement assets', 'SEO infrastructure', 'Newsletter launch'] },
-            { quarter: 'Q2', title: 'Launch', items: ['Self-serve launch campaign', 'GTM10 brand push', 'Lovable integration'] },
-            { quarter: 'Q3', title: 'Scale', items: ['Series A announcement', 'Community programs', 'Event series'] },
-            { quarter: 'Q4', title: 'Optimize', items: ['Performance marketing', 'Content flywheel', 'Pipeline acceleration'] }
-          ];
-
-          return (
-            <div className="max-w-6xl mx-auto p-8">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketing Strategy 2025</h1>
-                <p className="text-gray-600 text-lg">Building compounding growth loops for sustainable market leadership</p>
-              </div>
-
-              {/* Navigation Tabs */}
-              <div className="flex gap-2 mb-8 border-b">
-                {[
-                  { id: 'strategy', label: 'Strategy Overview' },
-                  { id: 'channels', label: 'Channel Mix' },
-                  { id: 'timeline', label: 'Roadmap' },
-                  { id: 'metrics', label: 'Target Outcomes' }
-                ].map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-3 text-sm font-medium transition-all ${
-                      activeTab === tab.id 
-                        ? 'text-blue-600 border-b-2 border-blue-600' 
-                        : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Strategy Overview Tab */}
-              {activeTab === 'strategy' && (
-                <div>
-                  {/* Strategic Narrative */}
-                  <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 mb-8 text-white">
-                    <h2 className="text-xl font-semibold mb-4">Strategic Approach</h2>
-                    <div className="grid md:grid-cols-2 gap-6 text-gray-300">
-                      <div>
-                        <p className="mb-3">
-                          <span className="text-white font-medium">Growth Philosophy:</span> We prioritize 
-                          <span className="text-blue-300"> compounding loops</span> (content, community, word-of-mouth) over 
-                          linear paid acquisition, building sustainable competitive moats.
-                        </p>
-                        <p>
-                          <span className="text-white font-medium">Focus:</span> Product-led growth supported by strategic 
-                          hero moments that drive awareness peaks and convert to long-term engagement.
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-3">
-                          <span className="text-white font-medium">Differentiation:</span> Deep technical content and 
-                          authentic community engagement over generic demand gen tactics.
-                        </p>
-                        <p>
-                          <span className="text-white font-medium">Efficiency:</span> Target 60% marketing-sourced pipeline 
-                          with below-industry CAC through organic and community channels.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Four Pillars */}
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Strategic Pillars</h3>
-                  <div className="grid md:grid-cols-2 gap-4 mb-8">
-                    {pillars.map((pillar, idx) => (
-                      <div key={idx} className={`${pillar.bgLight} ${pillar.border} border rounded-xl p-5`}>
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{pillar.icon}</span>
-                            <div>
-                              <h4 className="font-semibold text-gray-900">{pillar.name}</h4>
-                              <p className="text-sm text-gray-600">{pillar.description}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {pillar.initiatives.map((init, i) => (
-                            <span key={i} className="text-xs bg-white px-2 py-1 rounded-full text-gray-700 border">
-                              {init}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex justify-between mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500">
-                          <span>Timeline: {pillar.timeline}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                                    {/* Growth Loop Diagram - Cello Growth System */}
-                  <div className="bg-white rounded-xl border p-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Compounding Growth Model</h3>
-                    <p className="text-sm text-gray-500 mb-4">Every customer triggers multiple self-reinforcing growth loops</p>
-                    
-                    <div className="rounded-xl overflow-hidden">
-                      <img 
-                        src="https://placehold.co/800x500/f0f0f0/666?text=Marketing+Growth+System" 
-                        alt="Cello Growth System - Self-reinforcing compounding engine"
-                        className="w-full h-auto"
-                      />
-                    </div>
-                    
-                    <p className="text-center text-sm text-gray-500 mt-4">
-                      Each channel reinforces the others, creating sustainable growth independent of paid spend
-                    </p>
-                  </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Timeline Tab */}
-              {activeTab === 'timeline' && (
-                <div className="bg-white rounded-xl border p-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-6">2025 Roadmap</h3>
-                  <div className="grid md:grid-cols-4 gap-4">
-                    {milestones.map((m, idx) => (
-                      <div key={idx} className="relative">
-                        {/* Connector line */}
-                        {idx < milestones.length - 1 && (
-                          <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gray-200 -translate-x-1/2 z-0"></div>
-                        )}
-                        
-                        <div className="relative z-10">
-                          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg mb-3 ${
-                            idx === 0 ? 'bg-gray-400' : 
-                            idx === 1 ? 'bg-blue-500' : 
-                            idx === 2 ? 'bg-purple-500' : 'bg-green-500'
-                          }`}>
-                            {m.quarter}
-                          </div>
-                          <h4 className="font-semibold text-gray-900 mb-2">{m.title}</h4>
-                          <ul className="space-y-1">
-                            {m.items.map((item, i) => (
-                              <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
-                                <span className="text-gray-400 mt-1">•</span>
-                                {item}
-                              </li>
+            // Donut Chart Component
+            const DonutChart = () => {
+                const data = [
+                    { label: 'Content & SEO', pct: 35, color: '#3B82F6' },
+                    { label: 'Events & Campaigns', pct: 25, color: '#A855F7' },
+                    { label: 'Community & WoM', pct: 20, color: '#F97316' },
+                    { label: 'Paid Acquisition', pct: 12, color: '#22C55E' },
+                    { label: 'Sales Enablement', pct: 8, color: '#6B7280' }
+                ];
+                
+                let cumulative = 0;
+                const radius = 70;
+                const circumference = 2 * Math.PI * radius;
+                
+                return (
+                    <div className="flex flex-col items-center">
+                        <svg viewBox="0 0 200 200" className="w-48 h-48">
+                            {data.map((item, i) => {
+                                const offset = cumulative;
+                                cumulative += item.pct;
+                                const dashArray = `${(item.pct / 100) * circumference} ${circumference}`;
+                                const rotation = (offset / 100) * 360 - 90;
+                                return (
+                                    <circle
+                                        key={i}
+                                        cx="100"
+                                        cy="100"
+                                        r={radius}
+                                        fill="none"
+                                        stroke={item.color}
+                                        strokeWidth="35"
+                                        strokeDasharray={dashArray}
+                                        transform={`rotate(${rotation} 100 100)`}
+                                    />
+                                );
+                            })}
+                            <text x="100" y="95" textAnchor="middle" fontSize="16" fontWeight="600" fill="#1F2937">2025</text>
+                            <text x="100" y="112" textAnchor="middle" fontSize="11" fill="#6B7280">Allocation</text>
+                        </svg>
+                        <div className="mt-4 space-y-2">
+                            {data.map((item, i) => (
+                                <div key={i} className="flex items-center justify-between text-sm w-48">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                        <span className="text-gray-600">{item.label}</span>
+                                    </div>
+                                    <span className="font-medium text-gray-800">{item.pct}%</span>
+                                </div>
                             ))}
-                          </ul>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Key Milestones */}
-                  <div className="mt-8 pt-6 border-t">
-                    <h4 className="font-semibold text-gray-800 mb-4">Key Milestones</h4>
-                    <div className="flex flex-wrap gap-3">
-                      {[
-                        { label: 'Self-Serve Launch', date: 'Apr-May', color: 'bg-blue-100 text-blue-800' },
-                        { label: 'GTM10 Campaign', date: 'Mar-Jun', color: 'bg-purple-100 text-purple-800' },
-                        { label: 'Series A Announce', date: 'July', color: 'bg-pink-100 text-pink-800' },
-                        { label: 'Community Launch', date: 'Q3', color: 'bg-orange-100 text-orange-800' },
-                        { label: 'Performance Scale', date: 'Q4', color: 'bg-green-100 text-green-800' }
-                      ].map((milestone, idx) => (
-                        <div key={idx} className={`${milestone.color} px-3 py-2 rounded-lg text-sm`}>
-                          <span className="font-medium">{milestone.label}</span>
-                          <span className="opacity-75 ml-2">{milestone.date}</span>
-                        </div>
-                      ))}
                     </div>
-                  </div>
+                );
+            };
+
+            return (
+                <div className="min-h-screen p-6 md:p-10">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Header */}
+                        <div className="mb-8">
+                            <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketing Strategy 2025</h1>
+                            <p className="text-gray-500">Building compounding growth loops for sustainable market leadership</p>
+                        </div>
+
+                        {/* Tabs */}
+                        <div className="flex gap-8 border-b border-gray-200 mb-8">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`pb-3 text-sm font-medium border-b-2 transition-all ${
+                                        activeTab === tab.id
+                                            ? 'text-blue-600 border-blue-600'
+                                            : 'text-gray-500 border-transparent hover:text-blue-600'
+                                    }`}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Strategy Overview Tab */}
+                        {activeTab === 'strategy' && (
+                            <div>
+                                {/* Strategic Approach Box */}
+                                <div className="bg-slate-800 rounded-xl p-6 mb-8">
+                                    <h2 className="text-xl font-semibold text-white mb-4">Strategic Approach</h2>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <p className="text-slate-300 mb-4">
+                                                <span className="text-white font-medium">Growth Philosophy:</span> We prioritize{' '}
+                                                <span className="text-blue-400">compounding loops</span> (content, community, word-of-mouth) over linear paid acquisition, building sustainable competitive moats.
+                                            </p>
+                                            <p className="text-slate-300">
+                                                <span className="text-white font-medium">Focus:</span> Product-led growth supported by strategic hero moments that drive awareness peaks and convert to long-term engagement.
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-slate-300 mb-4">
+                                                <span className="text-white font-medium">Differentiation:</span> Deep technical content and authentic community engagement over generic demand gen tactics.
+                                            </p>
+                                            <p className="text-slate-300">
+                                                <span className="text-white font-medium">Efficiency:</span> Target 60% marketing-sourced pipeline with below-industry CAC through organic and community channels.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Strategic Pillars */}
+                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Strategic Pillars</h3>
+                                <div className="grid md:grid-cols-2 gap-4 mb-8">
+                                    {pillars.map((pillar, idx) => (
+                                        <div key={idx} className={`${pillar.bgColor} rounded-xl border border-gray-200 p-5`}>
+                                            <div className="flex items-start gap-3 mb-3">
+                                                <div className="text-2xl">{pillar.icon}</div>
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900">{pillar.title}</h4>
+                                                    <p className="text-sm text-gray-500">{pillar.description}</p>
+                                                </div>
+                                            </div>
+                                            <div className="mb-4 flex flex-wrap gap-2">
+                                                {pillar.initiatives.map((init, i) => (
+                                                    <span key={i} className="inline-block px-3 py-1 bg-white border border-gray-200 rounded-full text-sm text-gray-700">
+                                                        {init}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <div className="flex justify-between text-sm text-gray-500 pt-3 border-t border-gray-200">
+                                                <span>Timeline: {pillar.timeline}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Cello Growth System Image */}
+                                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Compounding Growth Model</h3>
+                                    <div className="rounded-xl overflow-hidden">
+                                        <img 
+                                            src="growth-system.png" 
+                                            alt="Cello Growth System - Self-reinforcing compounding engine"
+                                            className="w-full h-auto"
+                                        />
+                                    </div>
+                                    <p className="text-center text-sm text-gray-500 mt-4">
+                                        Each channel reinforces the others, creating sustainable growth independent of paid spend
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Channel Mix Tab */}
+                        {activeTab === 'channels' && (
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {/* Resource Allocation */}
+                                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Resource Allocation</h3>
+                                    <DonutChart />
+                                </div>
+
+                                {/* Channel Strategy */}
+                                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Channel Strategy</h3>
+                                    <div className="space-y-3">
+                                        <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+                                            <h4 className="font-semibold text-blue-800">Content & SEO (35%)</h4>
+                                            <p className="text-sm text-blue-700 mt-1">Foundation for organic discovery. Technical content, documentation, and thought leadership driving qualified inbound.</p>
+                                        </div>
+                                        <div className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
+                                            <h4 className="font-semibold text-purple-800">Events & Campaigns (25%)</h4>
+                                            <p className="text-sm text-purple-700 mt-1">Strategic hero moments: product launches, GTM10 activation, Series A. High-impact but time-bound.</p>
+                                        </div>
+                                        <div className="bg-orange-50 rounded-lg p-4 border-l-4 border-orange-500">
+                                            <h4 className="font-semibold text-orange-800">Community & WoM (20%)</h4>
+                                            <p className="text-sm text-orange-700 mt-1">Customer advocacy, founder content, influencer partnerships. Lowest CAC, highest trust.</p>
+                                        </div>
+                                        <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                                            <h4 className="font-semibold text-green-800">Paid Acquisition (12%)</h4>
+                                            <p className="text-sm text-green-700 mt-1">Targeted high-intent capture via Google & LinkedIn. Scaled only after organic baseline established.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Roadmap Tab */}
+                        {activeTab === 'roadmap' && (
+                            <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-8">2025 Roadmap</h3>
+                                
+                                {/* Timeline with circles */}
+                                <div className="flex justify-between items-start mb-8 relative">
+                                    {/* Connecting line */}
+                                    <div className="absolute top-8 left-16 right-16 h-0.5 bg-gray-200"></div>
+                                    
+                                    {[
+                                        { q: 'Q1', title: 'Foundation', color: 'bg-gray-400', items: ['Sales enablement assets', 'SEO infrastructure', 'Newsletter launch'] },
+                                        { q: 'Q2', title: 'Launch', color: 'bg-green-500', items: ['Self-serve launch campaign', 'GTM10 brand push', 'Lovable integration'] },
+                                        { q: 'Q3', title: 'Scale', color: 'bg-purple-500', items: ['Series A announcement', 'Community programs', 'Event series'] },
+                                        { q: 'Q4', title: 'Optimize', color: 'bg-green-400', items: ['Performance marketing', 'Content flywheel', 'Pipeline acceleration'] }
+                                    ].map((quarter, idx) => (
+                                        <div key={idx} className="flex flex-col items-center z-10 w-1/4">
+                                            <div className={`w-16 h-16 rounded-full ${quarter.color} flex items-center justify-center text-white font-bold text-lg mb-3`}>
+                                                {quarter.q}
+                                            </div>
+                                            <h4 className="font-semibold text-gray-900 mb-2">{quarter.title}</h4>
+                                            <ul className="text-sm text-gray-600 space-y-1">
+                                                {quarter.items.map((item, i) => (
+                                                    <li key={i} className="flex items-start gap-1">
+                                                        <span className="text-gray-400">•</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Key Milestones */}
+                                <div className="mt-8 pt-6 border-t border-gray-200">
+                                    <h4 className="font-semibold text-gray-900 mb-4">Key Milestones</h4>
+                                    <div className="flex flex-wrap gap-3">
+                                        <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                            Self-Serve Launch <span className="text-green-600">Apr-May</span>
+                                        </span>
+                                        <span className="px-4 py-2 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                                            GTM10 Campaign <span className="text-orange-600">Mar-Jun</span>
+                                        </span>
+                                        <span className="px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+                                            Series A Announce <span className="text-red-600">July</span>
+                                        </span>
+                                        <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                                            Community Launch <span className="text-purple-600">Q3</span>
+                                        </span>
+                                        <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                            Performance Scale <span className="text-blue-600">Q4</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Target Outcomes Tab - Updated Design */}
+                        {activeTab === 'outcomes' && (
+                            <div>
+                                {/* Key Metrics with Icons */}
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                    <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+                                        <div className="text-3xl mb-2">📊</div>
+                                        <div className="text-3xl font-bold text-gray-900">2,500+</div>
+                                        <div className="text-sm text-gray-500">per quarter by Q4</div>
+                                        <div className="text-xs text-gray-400 mt-1">Target MQLs</div>
+                                    </div>
+                                    <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+                                        <div className="text-3xl mb-2">💰</div>
+                                        <div className="text-3xl font-bold text-gray-900">60%</div>
+                                        <div className="text-sm text-gray-500">marketing-sourced</div>
+                                        <div className="text-xs text-gray-400 mt-1">Pipeline Influence</div>
+                                    </div>
+                                    <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+                                        <div className="text-3xl mb-2">📣</div>
+                                        <div className="text-3xl font-bold text-gray-900">10x</div>
+                                        <div className="text-sm text-gray-500">YoY awareness growth</div>
+                                        <div className="text-xs text-gray-400 mt-1">Brand Reach</div>
+                                    </div>
+                                    <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+                                        <div className="text-3xl mb-2">⚡</div>
+                                        <div className="text-3xl font-bold text-gray-900">-20%</div>
+                                        <div className="text-sm text-gray-500">reduction target</div>
+                                        <div className="text-xs text-gray-400 mt-1">CAC Efficiency</div>
+                                    </div>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {/* Lead Generation Targets Table */}
+                                    <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Lead Generation Targets</h3>
+                                        <table className="w-full text-sm">
+                                            <thead>
+                                                <tr className="border-b border-gray-200">
+                                                    <th className="text-left py-3 font-medium text-gray-500">Metric</th>
+                                                    <th className="text-center py-3 font-medium text-gray-500">Q1</th>
+                                                    <th className="text-center py-3 font-medium text-gray-500">Q2</th>
+                                                    <th className="text-center py-3 font-medium text-gray-500">Q3</th>
+                                                    <th className="text-center py-3 font-medium text-gray-500">Q4</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b border-gray-100">
+                                                    <td className="py-3 font-medium text-gray-700">MQLs</td>
+                                                    <td className="py-3 text-center text-gray-600">800</td>
+                                                    <td className="py-3 text-center text-gray-600">1,200</td>
+                                                    <td className="py-3 text-center text-gray-600">1,800</td>
+                                                    <td className="py-3 text-center text-gray-600">2,500</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-100">
+                                                    <td className="py-3 font-medium text-gray-700">SQLs</td>
+                                                    <td className="py-3 text-center text-gray-600">200</td>
+                                                    <td className="py-3 text-center text-gray-600">350</td>
+                                                    <td className="py-3 text-center text-gray-600">500</td>
+                                                    <td className="py-3 text-center text-gray-600">700</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-100">
+                                                    <td className="py-3 font-medium text-gray-700">Website Traffic</td>
+                                                    <td className="py-3 text-center text-gray-600">50K</td>
+                                                    <td className="py-3 text-center text-gray-600">80K</td>
+                                                    <td className="py-3 text-center text-gray-600">120K</td>
+                                                    <td className="py-3 text-center text-gray-600">180K</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="py-3 font-medium text-gray-700">Newsletter Subs</td>
+                                                    <td className="py-3 text-center text-gray-600">2K</td>
+                                                    <td className="py-3 text-center text-gray-600">5K</td>
+                                                    <td className="py-3 text-center text-gray-600">10K</td>
+                                                    <td className="py-3 text-center text-gray-600">20K</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Efficiency Metrics */}
+                                    <div className="bg-white rounded-xl border border-gray-200 p-6">
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Efficiency Metrics</h3>
+                                        <div className="space-y-5">
+                                            <div>
+                                                <div className="flex justify-between text-sm mb-2">
+                                                    <span className="text-gray-700">Marketing-Sourced Pipeline</span>
+                                                    <span className="font-medium text-gray-900">60% target</span>
+                                                </div>
+                                                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '60%' }}></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between text-sm mb-2">
+                                                    <span className="text-gray-700">Organic vs Paid Mix</span>
+                                                    <span className="font-medium text-gray-900">75% organic</span>
+                                                </div>
+                                                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-green-500 rounded-full" style={{ width: '75%' }}></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between text-sm mb-2">
+                                                    <span className="text-gray-700">Content Compound Growth</span>
+                                                    <span className="font-medium text-gray-900">+15% MoM</span>
+                                                </div>
+                                                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-gradient-to-r from-green-400 to-orange-400 rounded-full" style={{ width: '85%' }}></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between text-sm mb-2">
+                                                    <span className="text-gray-700">CAC Reduction Target</span>
+                                                    <span className="font-medium text-gray-900">-20% YoY</span>
+                                                </div>
+                                                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-gradient-to-r from-green-500 to-red-400 rounded-full" style={{ width: '70%' }}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Footer */}
+                        <div className="text-center mt-8 text-sm text-gray-400">
+                            <p>Detailed initiative breakdown available upon request</p>
+                            <a href="index.html" className="text-blue-500 hover:underline mt-2 inline-block">← Back to Gantt Chart</a>
+                        </div>
+                    </div>
                 </div>
-              )}
-
-              {/* Metrics Tab */}
-              {activeTab === 'metrics' && (
-                <div>
-                  {/* Key Metrics Grid */}
-                  <div className="grid md:grid-cols-4 gap-4 mb-8">
-                    {metrics.map((metric, idx) => (
-                      <div key={idx} className="bg-white rounded-xl border p-5 text-center">
-                        <span className="text-3xl mb-2 block">{metric.icon}</span>
-                        <div className="text-3xl font-bold text-gray-900 mb-1">{metric.value}</div>
-                        <div className="text-sm text-gray-500">{metric.subtext}</div>
-                        <div className="text-xs text-gray-400 mt-2">{metric.label}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Detailed Targets */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-xl border p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Lead Generation Targets</h3>
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="text-left text-gray-500 border-b">
-                            <th className="pb-2">Metric</th>
-                            <th className="pb-2">Q1</th>
-                            <th className="pb-2">Q2</th>
-                            <th className="pb-2">Q3</th>
-                            <th className="pb-2">Q4</th>
-                          </tr>
-                        </thead>
-                        <tbody className="text-gray-700">
-                          <tr className="border-b">
-                            <td className="py-2">MQLs</td>
-                            <td>800</td>
-                            <td>1,200</td>
-                            <td>1,800</td>
-                            <td>2,500</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2">SQLs</td>
-                            <td>200</td>
-                            <td>350</td>
-                            <td>500</td>
-                            <td>700</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2">Website Traffic</td>
-                            <td>50K</td>
-                            <td>80K</td>
-                            <td>120K</td>
-                            <td>180K</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2">Newsletter Subs</td>
-                            <td>2K</td>
-                            <td>5K</td>
-                            <td>10K</td>
-                            <td>20K</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div className="bg-white rounded-xl border p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Efficiency Metrics</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600">Marketing-Sourced Pipeline</span>
-                            <span className="font-semibold">60% target</span>
-                          </div>
-                          <div className="h-2 bg-gray-100 rounded-full">
-                            <div className="h-2 bg-blue-500 rounded-full" style={{width: '60%'}}></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600">Organic vs Paid Mix</span>
-                            <span className="font-semibold">75% organic</span>
-                          </div>
-                          <div className="h-2 bg-gray-100 rounded-full">
-                            <div className="h-2 bg-green-500 rounded-full" style={{width: '75%'}}></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600">Content Compound Growth</span>
-                            <span className="font-semibold">+15% MoM</span>
-                          </div>
-                          <div className="h-2 bg-gray-100 rounded-full">
-                            <div className="h-2 bg-purple-500 rounded-full" style={{width: '85%'}}></div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600">CAC Reduction Target</span>
-                            <span className="font-semibold">-20% YoY</span>
-                          </div>
-                          <div className="h-2 bg-gray-100 rounded-full">
-                            <div className="h-2 bg-orange-500 rounded-full" style={{width: '40%'}}></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="mt-8 pt-6 border-t text-center text-sm text-gray-400">
-                <p>Detailed initiative breakdown available upon request</p>
-              </div>
-            </div>
-          );
+            );
         };
 
-        ReactDOM.render(<InvestorOverview />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
