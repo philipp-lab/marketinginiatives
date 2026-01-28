@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        #root { width: 100vw; height: 100vh; }
+        #root { width: 100vw; min-height: 100vh; }
     </style>
 </head>
 <body>
@@ -22,6 +22,7 @@
           const [showLegend, setShowLegend] = useState(true);
           const [showDependencies, setShowDependencies] = useState(true);
           const [hoveredInit, setHoveredInit] = useState(null);
+          const [hideTBD, setHideTBD] = useState(false);
 
           const parseTimePeriod = (time) => {
             if (!time) return [];
@@ -32,194 +33,306 @@
             if (time.includes('Q3')) quarters.push('Q3');
             if (time.includes('Q4')) quarters.push('Q4');
             
-            if (time.includes('Q1-Q2') || time.includes('Q1–Q2')) quarters.push('Q1', 'Q2');
-            if (time.includes('Q1-Q4') || time.includes('Q1–Q4')) quarters.push('Q1', 'Q2', 'Q3', 'Q4');
-            if (time.includes('Q2-Q4') || time.includes('Q2–Q4')) quarters.push('Q2', 'Q3', 'Q4');
-            if (time.includes('Q3-Q4') || time.includes('Q3–Q4')) quarters.push('Q3', 'Q4');
+            if (time.includes('Q1-Q2') || time.includes('Q1–Q2')) { quarters.push('Q1', 'Q2'); }
+            if (time.includes('Q1-Q4') || time.includes('Q1–Q4')) { quarters.push('Q1', 'Q2', 'Q3', 'Q4'); }
+            if (time.includes('Q2-Q4') || time.includes('Q2–Q4')) { quarters.push('Q2', 'Q3', 'Q4'); }
+            if (time.includes('Q3-Q4') || time.includes('Q3–Q4')) { quarters.push('Q3', 'Q4'); }
             
             return [...new Set(quarters)];
           };
 
-          const initiatives = [
-            { id: 'gtm10-brand', area: 'P1 Hero', name: 'GTM10 Brand Campaign (Phase 1)', time: 'Q2 (Mar–Jun)', focus: 'Brand Awareness', status: 'In Preparation', feeds: ['gtm10-nurture', 'sales-stories', 'sales-assets', 'content-collabs', 'podcast'] },
-            { id: 'gtm10-nurture', area: 'P1 Hero', name: 'GTM10 Post-Nurture (Phase 2)', time: 'Q3 (Jun–Aug)', focus: 'Nurturing', status: 'Planned', feeds: ['newsletter-pm'] },
-            { id: 'gtm10-dinners', area: 'P1 Hero', name: 'GTM10 Dinners', time: 'Q3/Q4 Sep', focus: 'Lead Gen', status: 'Planned', feeds: ['sales-stories', 'user-advocacy', 'content-collabs'] },
-            { id: 'hackathons', area: 'P1 Hero', name: 'Lovable Hackathons', time: 'TBD (Q3/Q4)', focus: 'Brand Awareness', status: 'TBD', feeds: ['user-advocacy', 'content-collabs', 'backlinks'] },
-            { id: 'series-a', area: 'P1 Hero', name: 'Series A Fundraising Announcement', time: 'Q3', focus: 'Brand Awareness', status: 'Planned', feeds: ['newsletter-pm', 'founder-content', 'podcast', 'backlinks'] },
-            { id: 'self-serve', area: 'P1 Hero', name: 'Self-Serve Launch', time: 'Q2', focus: 'Lead Gen', status: 'Planned', feeds: ['feature-pages', 'newsletter-pm', 'founder-content'] },
-            { id: 'lovable-integration', area: 'P1 Hero', name: 'Lovable Integration', time: 'Q2', focus: 'Lead Gen', status: 'Planned', feeds: ['feature-pages', 'sales-assets', 'content-collabs'] },
-            { id: 'newsletter-pm', area: 'P2 PM', name: 'Product Marketing Newsletter', time: 'Start Q1, monthly', focus: 'Nurturing', status: 'Planned', feeds: ['intent-nurture', 'customer-advocacy'] },
-            { id: 'feature-pages', area: 'P2 PM', name: 'Feature Pages System', time: 'Q1–Q2', focus: 'Lead Gen', status: 'Planned', feeds: ['seo', 'google-ads', 'linkedin-ads'] },
-            { id: 'customer-advocacy', area: 'P4 WoM', name: 'Customer Advocacy Engine', time: 'Q1–Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['sales-stories', 'linkedin-ads', 'content-collabs'] },
-            { id: 'user-advocacy', area: 'P4 WoM', name: 'User Advocacy Engine', time: 'Q1–Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['backlinks', 'founder-content', 'micro-influencer'] },
-            { id: 'podcast', area: 'P4 WoM', name: '3rd-Party Podcast Appearances', time: 'Q2–Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['backlinks', 'peer-recs'] },
-            { id: 'amplify-ccl', area: 'P4 WoM', name: 'Amplify CCL', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['user-advocacy', 'content-collabs'] },
-            { id: 'peer-recs', area: 'P4 WoM', name: 'Push peer recommendations', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['customer-advocacy', 'sales-stories'] },
-            { id: 'micro-influencer', area: 'P4 WoM', name: 'Micro-Influencer Program', time: 'Q3-Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['backlinks', 'user-advocacy'] },
-            { id: 'geo-refresh', area: 'P5 GEO', name: 'GEO Refresh Loop', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['feature-pages', 'google-ads'] },
-            { id: 'backlinks', area: 'P5 GEO', name: 'Offsite Authority + Backlinks', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['seo', 'geo-refresh'] },
-            { id: 'seo', area: 'P5 GEO', name: 'SEO Housekeeping', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['google-ads'] },
-            { id: 'content-collabs', area: 'P6 CLG', name: 'Content Collabs (High-bar)', time: 'Q1–Q4', focus: 'Lead Gen', status: 'TBD', feeds: ['backlinks', 'newsletter-curation', 'linkedin-ads'] },
-            { id: 'founder-content', area: 'P6 CLG', name: 'Stefan Founder Content Flywheel', time: 'Q1–Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['newsletter-curation', 'backlinks', 'linkedin-ads'] },
-            { id: 'team-profiles', area: 'P6 CLG', name: 'Team Profiles + Posting System', time: 'Q2–Q4', focus: 'Brand Awareness', status: 'Planned', feeds: ['founder-content', 'linkedin-ads'] },
-            { id: 'newsletter-curation', area: 'P6 CLG', name: 'Newsletter (Curation)', time: 'Q2–Q4', focus: 'Nurturing', status: 'TBD', feeds: ['intent-nurture'] },
-            { id: 'signup-flow', area: 'P3 Sales', name: 'Optimizing sign-up form & flow', time: 'Q1', focus: 'Lead Gen', status: 'Planned', feeds: ['automation'] },
-            { id: 'pitch-deck', area: 'P3 Sales', name: 'Revamp pitch deck', time: 'Q1', focus: 'Lead Gen', status: 'Planned', feeds: ['sales-stories'] },
-            { id: 'competitor-library', area: 'P3 Sales', name: 'Competitor Comparison Library', time: 'Q1–Q2', focus: 'Lead Gen', status: 'Planned', feeds: ['sales-assets', 'feature-pages'] },
-            { id: 'sales-stories', area: 'P3 Sales', name: 'Success Stories + Logos Pack', time: 'Q1–Q4', focus: 'Lead Gen', status: 'Planned', feeds: ['sales-assets', 'linkedin-ads', 'google-ads'] },
-            { id: 'sales-assets', area: 'P3 Sales', name: 'Implementation / Migration Assets', time: 'Q1–Q2', focus: 'Lead Gen', status: 'Planned', feeds: ['webinars', 'intent-nurture'] },
-            { id: 'intent-nurture', area: 'P3 Sales', name: 'Intent-based Nurture', time: 'Q2–Q4', focus: 'Nurturing', status: 'Planned', feeds: ['automation', 'webinars'] },
-            { id: 'webinars', area: 'P3 Sales', name: 'Webinars (Monthly)', time: 'Q2–Q4', focus: 'Lead Gen', status: 'TBD', feeds: ['content-collabs', 'intent-nurture'] },
-            { id: 'google-ads', area: 'P7 Performance', name: 'Google Ads (High intent)', time: 'TBD (post baseline)', focus: 'Lead Gen', status: 'TBD', feeds: ['automation'] },
-            { id: 'linkedin-ads', area: 'P7 Performance', name: 'LinkedIn Ads (Mid-funnel)', time: 'TBD (post baseline)', focus: 'Lead Gen', status: 'TBD', feeds: ['automation'] },
-            { id: 'website-overhaul', area: 'P2 PM', name: 'Website Overhaul + Flexible CMS', time: 'Q3-Q4', focus: 'Lead Gen', status: 'TBD', feeds: ['feature-pages', 'seo'] },
-            { id: 'automation', area: 'Ops', name: 'Automation Experiments', time: 'Q1–Q4', focus: 'Nurturing', status: 'TBD', feeds: [] },
-          ];
+          const calculateRICE = (reach, impact, confidence, effort) => {
+            const reachMap = { 'High': 3, 'Med': 2, 'Low': 1 };
+            const impactMap = { 'High': 3, 'Med': 2, 'Low': 1 };
+            const confidenceMap = { 'High': 1.0, 'Med': 0.8, 'Low': 0.5 };
+            const effortMap = { 'High': 3, 'Med': 2, 'Low': 1 };
+            
+            const r = reachMap[reach] || 1;
+            const i = impactMap[impact] || 1;
+            const c = confidenceMap[confidence] || 0.5;
+            const e = effortMap[effort] || 1;
+            
+            return ((r * i * c) / e).toFixed(1);
+          };
 
-          const groupedInitiatives = initiatives.reduce((acc, init) => {
-            if (!acc[init.area]) {
-              acc[init.area] = [];
-            }
-            acc[init.area].push(init);
-            return acc;
-          }, {});
+          const initiatives = [
+            // P1 Hero
+            { id: 'gtm10-brand', area: 'P1 Hero', name: 'GTM10 Brand Campaign (Phase 1)', time: 'Q2 (Mar-Jun)', type: 'BA', reach: 'High', impact: 'Med', confidence: 'High', effort: 'High', status: 'In Preparation', owner: 'Prachi Rairikar', feeds: ['gtm10-nurture', 'series-a'] },
+            { id: 'gtm10-nurture', area: 'P1 Hero', name: 'GTM10 Post-Nurture (Phase 2)', time: 'Q3 (Jul-Aug)', type: 'N/LG', reach: 'Low', impact: 'Med', confidence: 'High', effort: 'Low', status: 'Planned', owner: 'Prachi Rairikar', feeds: [] },
+            { id: 'gtm10-dinners', area: 'P1 Hero', name: 'GTM10 Dinners', time: 'Q3 (Sep)', type: 'LG/BA', reach: 'Low', impact: 'High', confidence: 'High', effort: 'High', status: 'Planned', owner: 'Prachi Rairikar', feeds: [] },
+            { id: 'hackathons', area: 'P1 Hero', name: 'Lovable Hackathons', time: 'Q3/Q4', type: 'BA/LG', reach: 'High', impact: 'High', confidence: 'Low', effort: 'Med', status: 'TBD', owner: 'Prachi Rairikar', feeds: ['founder-content'] },
+            { id: 'series-a', area: 'P1 Hero', name: 'Series A Fundraising Announcement', time: 'Q3 (July)', type: 'BA/LG', reach: 'High', impact: 'High', confidence: 'High', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: ['newsletter-pm', 'founder-content'] },
+            { id: 'self-serve', area: 'P1 Hero', name: 'Self-Serve Launch', time: 'Q2 (Apr - May)', type: 'LG/BA', reach: 'High', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: ['feature-pages', 'newsletter-pm', 'founder-content'] },
+            { id: 'lovable-integration', area: 'P1 Hero', name: 'Lovable Integration', time: 'Q2 (Apr - May)', type: 'LG/BA', reach: 'High', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: ['newsletter-pm'] },
+            
+            // P2 PM
+            { id: 'newsletter-pm', area: 'P2 PM', name: 'Product Marketing Newsletter', time: 'Q1 (Feb) - Q4', type: 'N/LG', reach: 'Med', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            { id: 'feature-pages', area: 'P2 PM', name: 'Feature Pages System', time: 'Q1–Q2', type: 'LG/N', reach: 'Low', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: ['geo-refresh'] },
+            { id: 'website-overhaul', area: 'P2 PM', name: 'Website Overhaul + Flexible CMS', time: 'Q3-Q4', type: 'LG/N', reach: 'Low', impact: 'Med', confidence: 'Med', effort: 'High', status: 'TBD', owner: 'Philipp Neusser', feeds: [] },
+            
+            // P3 Sales Enablement
+            { id: 'signup-flow', area: 'P3 Sales', name: 'Optimizing our sign-up form & flow', time: 'Q1 (Jan)', type: 'LG', reach: 'Low', impact: 'Med', confidence: 'Low', effort: 'Low', status: 'In Preparation', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'pitch-deck', area: 'P3 Sales', name: 'Revamp our pitch deck', time: 'Q1 (Feb)', type: 'LG', reach: 'Low', impact: 'Med', confidence: 'Med', effort: 'Low', status: 'Planned', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'competitor-lib', area: 'P3 Sales', name: 'Competitor Comparison Library', time: 'Q1–Q4', type: 'LG', reach: 'Low', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: ['sales-assets'] },
+            { id: 'success-stories', area: 'P3 Sales', name: 'Success Stories + Logos Pack', time: 'Q1–Q4', type: 'LG/BA', reach: 'Low', impact: 'High', confidence: 'High', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: ['webinars'] },
+            { id: 'sales-assets', area: 'P3 Sales', name: 'Implementation / Migration Assets / Blogs', time: 'Q1–Q4', type: 'LG', reach: 'Low', impact: 'High', confidence: 'High', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: ['webinars', 'intent-nurture'] },
+            { id: 'intent-nurture', area: 'P3 Sales', name: 'Intent-based Nurture (Exit intent + sequence)', time: 'Q1–Q4 (Feb onwards)', type: 'N/LG', reach: 'Med', impact: 'High', confidence: 'Low', effort: 'Low', status: 'Ongoing', owner: 'Julia Kleber', feeds: [] },
+            { id: 'webinars', area: 'P3 Sales', name: 'Webinars (Monthly)', time: 'Q2–Q4', type: 'LG/N', reach: 'Low', impact: 'Med', confidence: 'Med', effort: 'High', status: 'TBD', owner: 'Philipp Neusser', feeds: [] },
+            
+            // P4 WoM / Influencer
+            { id: 'customer-advocacy', area: 'P4 WoM', name: 'Customer Advocacy Engine', time: 'Q1–Q4', type: 'BA/LG', reach: 'High', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'TBD', owner: 'Prerna Kaushik', feeds: ['success-stories'] },
+            { id: 'user-advocacy', area: 'P4 WoM', name: 'User Advocacy Engine', time: 'Q1–Q4', type: 'BA/LG', reach: 'High', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'podcasts', area: 'P4 WoM', name: '3rd-Party Podcast Appearances', time: 'Q2–Q4', type: 'BA', reach: 'Med', impact: 'Med', confidence: 'Med', effort: 'Low', status: 'Planned', owner: 'Prachi Rairikar', feeds: [] },
+            { id: 'amplify-ccl', area: 'P4 WoM', name: 'Amplify CCL', time: 'Q1–Q4', type: 'LG', reach: 'High', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'peer-recs', area: 'P4 WoM', name: 'Push peer recommendations', time: 'Q1–Q4', type: 'LG', reach: 'High', impact: 'High', confidence: 'Med', effort: 'High', status: 'Planned', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'micro-influencer', area: 'P4 WoM', name: 'Micro-Influencer Program (Paid Content)', time: 'Q3-Q4', type: 'BA/LG', reach: 'High', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Philipp Neusser', feeds: [] },
+            
+            // P5 GEO
+            { id: 'geo-refresh', area: 'P5 GEO', name: 'GEO Refresh Loop', time: 'Q1–Q4', type: 'LG/N', reach: 'Med', impact: 'Med', confidence: 'Low', effort: 'Low', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            { id: 'offsite-authority', area: 'P5 GEO', name: 'Offsite Authority + Backlinks', time: 'Q1–Q4', type: 'LG', reach: 'Med', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            { id: 'seo-housekeeping', area: 'P5 GEO', name: 'SEO Housekeeping', time: 'Q1–Q4', type: 'LG', reach: 'Low', impact: 'Med', confidence: 'Med', effort: 'Low', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            
+            // P6 CLG
+            { id: 'content-collabs', area: 'P6 CLG', name: 'Content Collabs (High-bar)', time: 'Q1–Q4', type: 'LG', reach: 'High', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'TBD', owner: 'Philipp Neusser', feeds: [] },
+            { id: 'founder-content', area: 'P6 CLG', name: 'Stefan Founder Content Flywheel', time: 'Q1–Q4', type: 'BA', reach: 'High', impact: 'High', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            { id: 'team-profiles', area: 'P6 CLG', name: 'Team Profiles + Posting System', time: 'Q1 (Feb) –Q4', type: 'BA', reach: 'Med', impact: 'Med', confidence: 'Med', effort: 'Med', status: 'Planned', owner: 'Prerna Kaushik', feeds: [] },
+            { id: 'newsletter-curation', area: 'P6 CLG', name: 'Newsletter (Curation)', time: 'Q2–Q4', type: 'N', reach: 'Med', impact: 'Low', confidence: 'Low', effort: 'Low', status: 'TBD', owner: 'Prerna Kaushik', feeds: [] },
+            
+            // P7 Performance
+            { id: 'google-ads', area: 'P7 Perf', name: 'Google Ads (High intent)', time: 'TBD (post baseline)', type: 'LG', reach: 'High', impact: 'Med', confidence: 'Med', effort: 'Low', status: 'TBD', owner: '', feeds: [] },
+            { id: 'linkedin-ads', area: 'P7 Perf', name: 'LinkedIn Ads (Mid-funnel)', time: 'TBD (post baseline)', type: 'BA', reach: 'High', impact: 'Med', confidence: 'Med', effort: 'Low', status: 'TBD', owner: '', feeds: [] },
+            
+            // Ops
+            { id: 'automation', area: 'Ops', name: 'Automation Experiments', time: 'Q1–Q4', type: 'N', reach: 'Low', impact: 'High', confidence: 'Low', effort: 'Low', status: 'TBD', owner: 'Prerna Kaushik', feeds: [] },
+          ];
 
           const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
           
           const getStatusColor = (status) => {
-            if (status === 'In Preparation') return 'bg-orange-200 border-orange-400';
-            if (status === 'TBD') return 'bg-red-100 border-red-300';
-            return 'bg-purple-200 border-purple-400';
+            switch(status) {
+              case 'In Preparation': return 'bg-orange-500';
+              case 'Ongoing': return 'bg-green-500';
+              case 'Planned': return 'bg-blue-500';
+              case 'TBD': return 'bg-gray-400';
+              default: return 'bg-gray-400';
+            }
+          };
+
+          const getTypeColors = (type) => {
+            if (type.includes('BA') && type.includes('LG')) return 'bg-gradient-to-r from-purple-500 to-blue-500';
+            if (type.includes('N') && type.includes('LG')) return 'bg-gradient-to-r from-green-500 to-blue-500';
+            if (type.includes('BA')) return 'bg-purple-500';
+            if (type.includes('LG')) return 'bg-blue-500';
+            if (type.includes('N')) return 'bg-green-500';
+            return 'bg-gray-400';
           };
 
           const renderBar = (init, status) => {
             const activeQuarters = parseTimePeriod(init.time);
-            const color = getStatusColor(status);
-            const isHovered = hoveredInit === init.id;
-            const feedsThis = initiatives.filter(i => i.feeds.includes(init.id));
-            const isFedBy = feedsThis.length > 0;
-            const feedsOthers = init.feeds.length > 0;
+            const rice = calculateRICE(init.reach, init.impact, init.confidence, init.effort);
             
-            return React.createElement('div', { className: "grid grid-cols-4 gap-1 flex-1" },
-              quarters.map((q, idx) =>
-                React.createElement('div', { key: q, className: "relative h-8 border-l border-gray-200" },
-                  activeQuarters.includes(q) && React.createElement('div', {
-                    className: `absolute inset-0 m-0.5 ${color} border rounded transition-all ${isHovered ? 'ring-2 ring-blue-500' : ''}`
-                  },
-                    showDependencies && feedsOthers && React.createElement('div', {
-                      className: "absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-green-500 rounded-full border border-white",
-                      title: "Feeds other initiatives"
-                    }),
-                    showDependencies && isFedBy && React.createElement('div', {
-                      className: "absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full border border-white",
-                      title: "Fed by other initiatives"
-                    })
-                  )
-                )
-              )
-            );
+            return quarters.map((q, idx) => {
+              const isActive = activeQuarters.includes(q);
+              const isFirst = isActive && (idx === 0 || !activeQuarters.includes(quarters[idx - 1]));
+              const isLast = isActive && (idx === quarters.length - 1 || !activeQuarters.includes(quarters[idx + 1]));
+              const isSingle = isFirst && isLast;
+              const midIdx = Math.floor((activeQuarters.indexOf(activeQuarters[0]) + activeQuarters.indexOf(activeQuarters[activeQuarters.length - 1])) / 2);
+              const showScore = isActive && quarters.indexOf(q) === quarters.indexOf(activeQuarters[Math.floor(activeQuarters.length / 2)]);
+              
+              return (
+                <div key={q} className="w-24 h-8 px-1 flex items-center">
+                  {isActive ? (
+                    <div 
+                      className={`h-6 w-full ${getTypeColors(init.type)} ${
+                        isSingle ? 'rounded-md' : isFirst ? 'rounded-l-md' : isLast ? 'rounded-r-md' : ''
+                      } flex items-center justify-center shadow-sm`}
+                    >
+                      {showScore && (
+                        <span className="text-white text-xs font-bold drop-shadow">{rice}</span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="h-6 w-full"></div>
+                  )}
+                </div>
+              );
+            });
           };
 
-          return React.createElement('div', { className: "w-full h-full bg-white p-6 overflow-auto" },
-            React.createElement('div', { className: "mb-6" },
-              React.createElement('h1', { className: "text-2xl font-bold text-gray-800 mb-4" }, "Marketing Initiatives Gantt Chart"),
-              React.createElement('div', { className: "flex gap-2 mb-4" },
-                React.createElement('button', {
-                  onClick: () => setShowDependencies(!showDependencies),
-                  className: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                }, showDependencies ? 'Hide' : 'Show', ' Dependencies')
-              ),
-              showLegend && React.createElement('div', { className: "mb-4 p-4 bg-gray-50 rounded space-y-3" },
-                React.createElement('div', { className: "flex gap-4" },
-                  React.createElement('div', { className: "flex items-center gap-2" },
-                    React.createElement('div', { className: "w-12 h-6 bg-purple-200 border border-purple-400 rounded" }),
-                    React.createElement('span', { className: "text-sm" }, "Planned/Delivery")
-                  ),
-                  React.createElement('div', { className: "flex items-center gap-2" },
-                    React.createElement('div', { className: "w-12 h-6 bg-orange-200 border border-orange-400 rounded" }),
-                    React.createElement('span', { className: "text-sm" }, "In Preparation")
-                  ),
-                  React.createElement('div', { className: "flex items-center gap-2" },
-                    React.createElement('div', { className: "w-12 h-6 bg-red-100 border border-red-300 rounded" }),
-                    React.createElement('span', { className: "text-sm" }, "TBD")
-                  )
-                ),
-                showDependencies && React.createElement('div', { className: "flex gap-4 pt-2 border-t" },
-                  React.createElement('div', { className: "flex items-center gap-2" },
-                    React.createElement('div', { className: "w-3 h-3 bg-green-500 rounded-full border border-white" }),
-                    React.createElement('span', { className: "text-sm" }, "Feeds other initiatives (outputs)")
-                  ),
-                  React.createElement('div', { className: "flex items-center gap-2" },
-                    React.createElement('div', { className: "w-3 h-3 bg-blue-500 rounded-full border border-white" }),
-                    React.createElement('span', { className: "text-sm" }, "Fed by other initiatives (inputs)")
-                  )
-                )
-              )
-            ),
-            React.createElement('div', { className: "flex gap-2 mb-2 sticky top-0 bg-white z-10 pb-2" },
-              React.createElement('div', { className: "w-80 font-semibold text-sm text-gray-700" }, "Initiative"),
-              React.createElement('div', { className: "grid grid-cols-4 gap-1 flex-1" },
-                quarters.map(q =>
-                  React.createElement('div', { key: q, className: "text-center font-semibold text-gray-700 border-l border-gray-300 py-2" }, q)
-                )
-              )
-            ),
-            Object.entries(groupedInitiatives).map(([area, items]) =>
-              React.createElement('div', { key: area, className: "mb-6" },
-                React.createElement('div', { className: "font-bold text-sm text-gray-800 mb-2 bg-gray-100 p-2 rounded" }, area),
-                items.map((init, idx) => {
-                  const feedsThis = initiatives.filter(i => i.feeds.includes(init.id));
-                  const feedsCount = init.feeds.length;
-                  const isHovered = hoveredInit === init.id;
-                  const shouldHighlight = showDependencies && (
-                    isHovered || 
-                    (hoveredInit && init.feeds.includes(hoveredInit)) ||
-                    (hoveredInit && feedsThis.some(i => i.id === hoveredInit))
-                  );
+          const areas = [...new Set(initiatives.map(i => i.area))];
+          
+          const filteredInitiatives = hideTBD 
+            ? initiatives.filter(i => i.status !== 'TBD')
+            : initiatives;
+
+          return (
+            <div className="p-6 bg-gray-50 min-h-screen">
+              <div className="max-w-7xl mx-auto">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">Marketing Initiatives 2025</h1>
+                
+                {/* RICE Score Explanation */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <h3 className="font-semibold text-blue-800 mb-2">📊 RICE Score Calculation</h3>
+                  <div className="text-sm text-blue-700">
+                    <p className="mb-2"><strong>RICE = (Reach × Impact × Confidence) / Effort</strong></p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                      <div><strong>Reach:</strong> High=3, Med=2, Low=1</div>
+                      <div><strong>Impact:</strong> High=3, Med=2, Low=1</div>
+                      <div><strong>Confidence:</strong> High=100%, Med=80%, Low=50%</div>
+                      <div><strong>Effort:</strong> High=3, Med=2, Low=1</div>
+                    </div>
+                    <p className="mt-2 text-xs">Higher RICE = better ROI. Score of 3.0+ is high priority, 1.5-3.0 is good, below 1.5 may need reconsideration.</p>
+                  </div>
+                </div>
+                
+                {/* Controls */}
+                <div className="flex flex-wrap gap-4 mb-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input 
+                      type="checkbox" 
+                      checked={showLegend}
+                      onChange={(e) => setShowLegend(e.target.checked)}
+                      className="rounded"
+                    />
+                    Show Legend
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input 
+                      type="checkbox" 
+                      checked={showDependencies}
+                      onChange={(e) => setShowDependencies(e.target.checked)}
+                      className="rounded"
+                    />
+                    Show Dependencies
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input 
+                      type="checkbox" 
+                      checked={hideTBD}
+                      onChange={(e) => setHideTBD(e.target.checked)}
+                      className="rounded"
+                    />
+                    Hide TBD Projects
+                  </label>
+                </div>
+                
+                {/* Legend */}
+                {showLegend && (
+                  <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border">
+                    <div className="flex flex-wrap gap-6 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">Type:</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded"></span> Lead Gen</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 bg-purple-500 rounded"></span> Brand Awareness</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded"></span> Nurturing</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">Status:</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 bg-orange-500 rounded-full"></span> In Preparation</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 bg-green-500 rounded-full"></span> Ongoing</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 bg-blue-500 rounded-full"></span> Planned</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 bg-gray-400 rounded-full"></span> TBD</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Gantt Chart */}
+                <div className="bg-white rounded-lg shadow-sm border overflow-x-auto">
+                  {/* Header */}
+                  <div className="flex border-b bg-gray-100 sticky top-0">
+                    <div className="w-64 p-3 font-semibold text-gray-700 border-r flex-shrink-0">Initiative</div>
+                    <div className="w-32 p-3 font-semibold text-gray-700 border-r flex-shrink-0">Owner</div>
+                    <div className="w-16 p-3 font-semibold text-gray-700 border-r flex-shrink-0 text-center">Status</div>
+                    {quarters.map(q => (
+                      <div key={q} className="w-24 p-3 font-semibold text-gray-700 text-center flex-shrink-0">{q}</div>
+                    ))}
+                  </div>
                   
-                  return React.createElement('div', {
-                    key: idx,
-                    className: `flex gap-2 mb-1 py-1 transition-all ${shouldHighlight ? 'bg-blue-50 border-l-4 border-blue-400' : 'hover:bg-gray-50'}`,
-                    onMouseEnter: () => setHoveredInit(init.id),
-                    onMouseLeave: () => setHoveredInit(null)
-                  },
-                    React.createElement('div', { className: "w-80 text-sm text-gray-700 flex items-center gap-2" },
-                      React.createElement('span', { className: "truncate", title: init.name }, init.name),
-                      showDependencies && (feedsCount > 0 || feedsThis.length > 0) && React.createElement('span', { className: "text-xs text-gray-500 flex-shrink-0" },
-                        feedsThis.length > 0 && `←${feedsThis.length}`,
-                        feedsCount > 0 && ` →${feedsCount}`
-                      )
-                    ),
-                    renderBar(init, init.status)
+                  {/* Body */}
+                  {areas.map(area => {
+                    const areaInitiatives = filteredInitiatives.filter(i => i.area === area);
+                    if (areaInitiatives.length === 0) return null;
+                    
+                    return (
+                      <div key={area}>
+                        <div className="flex bg-gray-50 border-b">
+                          <div className="w-full p-2 font-semibold text-gray-600 text-sm">{area}</div>
+                        </div>
+                        {areaInitiatives.map(init => {
+                          const feedsThis = filteredInitiatives.filter(i => i.feeds.includes(init.id));
+                          const feedsCount = init.feeds.length;
+                          
+                          return (
+                            <div 
+                              key={init.id}
+                              className={`flex border-b items-center ${
+                                hoveredInit === init.id ? 'bg-blue-50 border-l-4 border-blue-400' : 'hover:bg-gray-50'
+                              }`}
+                              onMouseEnter={() => setHoveredInit(init.id)}
+                              onMouseLeave={() => setHoveredInit(null)}
+                            >
+                              <div className="w-64 p-2 text-sm text-gray-700 flex items-center gap-2 flex-shrink-0 border-r">
+                                <span className="truncate" title={init.name}>{init.name}</span>
+                                {showDependencies && (feedsCount > 0 || feedsThis.length > 0) && (
+                                  <span className="text-xs text-gray-500 flex-shrink-0">
+                                    {feedsThis.length > 0 && `←${feedsThis.length}`}
+                                    {feedsCount > 0 && ` →${feedsCount}`}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="w-32 p-2 text-xs text-gray-600 flex-shrink-0 border-r truncate" title={init.owner}>
+                                {init.owner || '-'}
+                              </div>
+                              <div className="w-16 p-2 flex-shrink-0 border-r flex justify-center">
+                                <span className={`w-3 h-3 rounded-full ${getStatusColor(init.status)}`} title={init.status}></span>
+                              </div>
+                              {renderBar(init, init.status)}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                {/* Dependency Tooltip */}
+                {showDependencies && hoveredInit && (() => {
+                  const current = initiatives.find(i => i.id === hoveredInit);
+                  const feedsThis = initiatives.filter(i => i.feeds.includes(hoveredInit));
+                  const feedsOthers = initiatives.filter(i => current.feeds.includes(i.id));
+                  
+                  if (feedsThis.length === 0 && feedsOthers.length === 0) return null;
+                  
+                  return (
+                    <div className="fixed bottom-4 right-4 bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 max-w-md z-20">
+                      <h3 className="font-bold text-sm mb-2 text-gray-800">{current.name}</h3>
+                      <p className="text-xs text-gray-500 mb-2">Owner: {current.owner || 'TBD'}</p>
+                      {feedsThis.length > 0 && (
+                        <div className="mb-2">
+                          <p className="text-xs font-semibold text-blue-600 mb-1">📥 Fed by ({feedsThis.length}):</p>
+                          <ul className="text-xs text-gray-600 space-y-0.5 pl-2">
+                            {feedsThis.map(i => <li key={i.id}>• {i.name}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                      {feedsOthers.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-green-600 mb-1">📤 Feeds ({feedsOthers.length}):</p>
+                          <ul className="text-xs text-gray-600 space-y-0.5 pl-2">
+                            {feedsOthers.map(i => <li key={i.id}>• {i.name}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   );
-                })
-              )
-            ),
-            showDependencies && hoveredInit && (() => {
-              const current = initiatives.find(i => i.id === hoveredInit);
-              const feedsThis = initiatives.filter(i => i.feeds.includes(hoveredInit));
-              const feedsOthers = initiatives.filter(i => current.feeds.includes(i.id));
-              
-              return React.createElement('div', { className: "fixed bottom-4 right-4 bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 max-w-md z-20" },
-                React.createElement('h3', { className: "font-bold text-sm mb-2 text-gray-800" }, current.name),
-                feedsThis.length > 0 && React.createElement('div', { className: "mb-2" },
-                  React.createElement('p', { className: "text-xs font-semibold text-blue-600 mb-1" }, "📥 Fed by (", feedsThis.length, "):"),
-                  React.createElement('ul', { className: "text-xs text-gray-600 space-y-0.5 pl-2" },
-                    feedsThis.map(i => React.createElement('li', { key: i.id }, "• ", i.name))
-                  )
-                ),
-                feedsOthers.length > 0 && React.createElement('div', null,
-                  React.createElement('p', { className: "text-xs font-semibold text-green-600 mb-1" }, "📤 Feeds (", feedsOthers.length, "):"),
-                  React.createElement('ul', { className: "text-xs text-gray-600 space-y-0.5 pl-2" },
-                    feedsOthers.map(i => React.createElement('li', { key: i.id }, "• ", i.name))
-                  )
-                )
-              );
-            })()
+                })()}
+              </div>
+            </div>
           );
         };
 
-        ReactDOM.render(React.createElement(GanttChart), document.getElementById('root'));
+        ReactDOM.render(<GanttChart />, document.getElementById('root'));
     </script>
 </body>
 </html>
